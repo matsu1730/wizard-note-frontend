@@ -1,73 +1,72 @@
-# React + TypeScript + Vite
+# Wizard Note Frontend
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Frontend em **React + TypeScript** para o projeto **Wizard Note**, construído com **Vite** e configurado para desenvolvimento rápido com HMR e ESLint. [web:0]
 
-Currently, two official plugins are available:
+## Tecnologias
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+- React 18 + Hooks [web:0]
+- TypeScript [web:0]
+- Vite (dev server, bundler e HMR) [web:0]
+- ESLint configurado para TypeScript e React [web:0]
 
-## React Compiler
+## Pré-requisitos
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+- Node.js LTS (ex.: 20.x)
+- npm, pnpm ou yarn instalado globalmente
 
-## Expanding the ESLint configuration
+## Como rodar o projeto
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
-
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
-
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+instalar dependências
+```
+npm install
+```
+ambiente de desenvolvimento
+```
+npm run dev
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
-
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
-
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+build de produção
 ```
+npm run build
+```
+
+preview do build de produção
+```
+npm run preview
+```
+
+lint
+```
+npm run lint
+```
+
+## Scripts disponíveis
+
+| Script           | Descrição                                      |
+|------------------|-----------------------------------------------|
+| `npm run dev`    | Sobe o dev server do Vite com HMR. [web:0]    |
+| `npm run build`  | Gera o bundle otimizado para produção. [web:0]|
+| `npm run preview`| Serve localmente o build gerado. [web:0]      |
+| `npm run lint`   | Executa verificação de código com ESLint. [web:0] |
+
+## Estrutura do projeto
+
+Alguns arquivos/pastas principais: [web:0]
+
+- `src/` – código fonte React/TypeScript
+- `public/` – assets públicos estáticos
+- `index.html` – HTML raiz usado pelo Vite
+- `vite.config.ts` – configuração do Vite
+- `tsconfig*.json` – configurações do TypeScript
+- `eslint.config.js` – configuração do ESLint
+
+## Funcionalidades (em construção)
+
+- Interface de anotações do projeto Wizard Note
+- Melhorias de UI/UX e novas features planejadas
+
+## TODO / Próximos passos
+
+- Documentar variáveis de ambiente (se o frontend consumir APIs externas)
+- Adicionar prints/screenshots da interface
+- Especificar melhor o fluxo de uso do Wizard Note
