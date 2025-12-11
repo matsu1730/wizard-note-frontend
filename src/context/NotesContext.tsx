@@ -59,6 +59,9 @@ export function NotesProvider({ children }: NotesProviderProps) {
 
     const reloadNotes = async () => {
         try {
+            if (localStorage.getItem('access_token') === null || localStorage.getItem('user_id') === null) {
+                return;
+            }
             setLoading(true);
             const list = await fetchNotes();
             setNotes(list);
