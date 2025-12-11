@@ -2,10 +2,11 @@ import { FormEvent, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import '../styles/Auth.css';
 import axios from 'axios';
-import {LoginResponse} from "../dto/login.dto.tsx";
+import { LoginResponse } from '../dto/login.dto.tsx';
 
 export function LoginPage() {
     const navigate = useNavigate();
+
     const [email, setEmail] = useState('');
     const [senha, setSenha] = useState('');
     const [lembrarMe, setLembrarMe] = useState(false);
@@ -26,7 +27,6 @@ export function LoginPage() {
 
             const data = response.data;
             localStorage.setItem('access_token', data.access_token);
-
             return true;
         } catch (error) {
             console.error('Erro no login', error);
@@ -37,6 +37,7 @@ export function LoginPage() {
     async function handleSubmit(e: FormEvent) {
         e.preventDefault();
         const ok = await validarLogin(email, senha);
+
         if (ok) {
             alert('Login realizado com sucesso!');
             navigate('/home');
@@ -52,16 +53,20 @@ export function LoginPage() {
     return (
         <div className="auth-container">
             <div className="left-side">
-                {/* aqui você coloca o conteúdo da coluna esquerda do Login/Acessar_conta.html */}
+                <div className="logo-container">
+                    {/* aqui você coloca o conteúdo da coluna esquerda do Login/Acessar_conta.html */}
+                    {/* <img src="/logo.svg" alt="WizardNote" /> */}
+                </div>
                 <h1>WizardNote</h1>
                 <p>Suas notas organizadas com magia.</p>
             </div>
 
             <div className="right-side">
-                <div className="auth-card">
+                <section className="auth-card">
                     <h2>Acessar conta</h2>
+                    <p className="subtitle">Entre para continuar gerenciando suas notas.</p>
 
-                    <form id="loginForm" onSubmit={handleSubmit}>
+                    <form onSubmit={handleSubmit}>
                         <div className="form-group">
                             <label htmlFor="email">E-mail</label>
                             <input
@@ -89,14 +94,14 @@ export function LoginPage() {
                         <div className="form-footer">
                             <label className="checkbox">
                                 <input
-                                    id="lembrarMe"
                                     type="checkbox"
                                     checked={lembrarMe}
                                     onChange={(e) => setLembrarMe(e.target.checked)}
                                 />
-                                <span>Lembrar-me</span>
+                                Lembrar-me
                             </label>
                             {/* Aqui poderia ter "Esqueci minha senha" se existir no HTML */}
+                            {/* <button type="button" className="btn-link">Esqueci minha senha</button> */}
                         </div>
 
                         <button type="submit" className="btn-primary">
@@ -110,7 +115,7 @@ export function LoginPage() {
                             Criar conta
                         </button>
                     </div>
-                </div>
+                </section>
             </div>
         </div>
     );

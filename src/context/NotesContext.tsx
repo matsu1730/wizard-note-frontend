@@ -59,7 +59,7 @@ export function NotesProvider({ children }: NotesProviderProps) {
 
     const reloadNotes = async () => {
         try {
-            if (localStorage.getItem('access_token') === null || localStorage.getItem('user_id') === null) {
+            if (localStorage.getItem('access_token') === null) {
                 return;
             }
             setLoading(true);

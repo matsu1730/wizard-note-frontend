@@ -3,8 +3,10 @@ import { useNotes } from '../context/NotesContext';
 import '../styles/Home.css';
 import axios from 'axios';
 import { CategoriaDto } from '../dto/categoria.dto.tsx';
+import {useNavigate} from "react-router-dom";
 
 export function HomePage() {
+    const navigate = useNavigate();
     const {
         notes,
         currentNoteId,
@@ -35,11 +37,10 @@ export function HomePage() {
     const currentNote = notes.find((n) => n.id_nota === currentNoteId) || null;
 
     useEffect(() => {
-        if (currentNote) {
-            setEditTitulo(currentNote.titulo || '');
-            setEditConteudo(currentNote.conteudo || '');
-            setEditResumo(currentNote.resumo_ia || '');
-        }
+        if (!currentNote) return;
+        setEditTitulo(currentNote.titulo || '');
+        setEditConteudo(currentNote.conteudo || '');
+        setEditResumo(currentNote.resumo_ia || '');
     }, [currentNote]);
 
     async function handleOpenCreateModal() {
@@ -53,6 +54,7 @@ export function HomePage() {
                     },
                 },
             );
+
             setCategorias(response.data);
             setNoteTitle('');
             setNoteContent('');
@@ -90,7 +92,7 @@ export function HomePage() {
         alert('Nota criada com sucesso!');
     }
 
-    async function handleGenerateResumo() {
+    async function handleGenerateResumoCreate() {
         if (!noteContent.trim()) {
             alert('Adicione conteúdo antes de resumir.');
             return;
@@ -112,40 +114,96 @@ export function HomePage() {
         alert('Nota atualizada com sucesso!');
     }
 
+    async function handleGenerateResumoEdit() {
+        if (!isEditMode) return;
+
+        if (!editConteudo.trim()) {
+            alert('Adicione conteúdo antes de gerar o resumo.');
+            return;
+        }
+
+        const resumo = await generateResumoForContent(editConteudo);
+        setEditResumo(resumo);
+    }
+
+    function handleDeleteNote() {
+        if (
+            confirm(
+                'Tem certeza que deseja deletar esta nota? Esta ação não pode ser desfeita.',
+            )
+        ) {
+            deleteCurrentNote();
+            alert('Nota deletada com sucesso!');
+        }
+    }
+
+    const handleLogout = () => {
+        localStorage.clear();
+        navigate('/', { replace: true });
+    };
+
     return (
         <div className="home-container">
             <header className="home-header">
-                <h1>Wizard Note</h1>
-                <button
-                    id="createNoteBtn"
-                    className="btn-primary"
-                    onClick={handleOpenCreateModal}
-                >
-                    Criar Nota
-                </button>
+                <h1 className="home-title">Wizard Note</h1>
+
+                <div className="home-header-spacer" />
+
+                <div className="home-header-actions">
+                    <button
+                        id="createNoteBtn"
+                        className="btn-primary"
+                        type="button"
+                        onClick={handleOpenCreateModal}
+                    >
+                        Criar Nota
+                    </button>
+
+                    <button
+                        id="logoutBtn"
+                        className="btn-secondary"
+                        type="button"
+                        onClick={handleLogout}
+                    >
+                        Logout
+                    </button>
+                </div>
             </header>
 
             <main className="home-main">
-                <section id="notesGrid" className="notes-grid">
-                    {notes.length === 0 ? (
+                {notes.length === 0 ? (
+                    <section className="empty-state">
+                        <h2>Você ainda não tem notas</h2>
                         <p>
-                            Nenhuma nota criada ainda. Clique em &quot;Crie uma nota&quot; para
-                            começar!
+                            Clique em <strong>&quot;Criar Nota&quot;</strong> para começar!
                         </p>
-                    ) : (
-                        notes.map((note) => (
-                            <article
-                                key={note.id_nota}
-                                className="note-card"
-                                onClick={() => openNote(note.id_nota)}
-                            >
-                                <h3>{note.titulo}</h3>
-                                <p>{note.conteudo}</p>
-                                <p>{note.resumo_ia}</p>
-                            </article>
-                        ))
-                    )}
-                </section>
+                    </section>
+                ) : (
+                    <section id="notesGrid" className="notes-section">
+                        <div className="notes-header">
+                            <h2>Suas notas</h2>
+                            <p className="notes-subtitle">
+                                Clique em uma nota para visualizar, editar ou excluir.
+                            </p>
+                        </div>
+
+                        <div className="notes-grid">
+                            {notes.map((note) => (
+                                <article
+                                    key={note.id_nota}
+                                    className="note-card"
+                                    onClick={() => openNote(note.id_nota)}
+                                >
+                                    <h3>{note.titulo}</h3>
+                                    <p className="note-content">{note.conteudo}</p>
+                                    {note.resumo_ia && (
+                                        <p className="note-summary">{note.resumo_ia}</p>
+                                    )}
+                                </article>
+                            ))}
+                        </div>
+                    </section>
+                )}
             </main>
 
             {/* Modal Criar Nota */}
@@ -183,7 +241,7 @@ export function HomePage() {
                                 type="button"
                                 id="modalResumirBtn"
                                 className="btn-secondary"
-                                onClick={handleGenerateResumo}
+                                onClick={handleGenerateResumoCreate}
                             >
                                 Gerar resumo
                             </button>
@@ -268,22 +326,14 @@ export function HomePage() {
                                 type="button"
                                 className="btn-secondary"
                                 disabled={!isEditMode}
-                                onClick={async () => {
-                                    if (!isEditMode) return;
-                                    if (!editConteudo.trim()) {
-                                        alert('Adicione conteúdo antes de gerar o resumo.');
-                                        return;
-                                    }
-                                    const resumo = await generateResumoForContent(editConteudo);
-                                    setEditResumo(resumo);
-                                }}
+                                onClick={handleGenerateResumoEdit}
                             >
                                 Gerar resumo IA
                             </button>
                         </div>
 
-                        <p id="viewNoteDate">
-                            Criada em:{' '}
+                        <p id="viewNoteDate" className="note-date">
+                            Criada em{' '}
                             {new Date(currentNote.data_criacao).toLocaleString('pt-BR')}
                         </p>
 
@@ -292,16 +342,7 @@ export function HomePage() {
                                 id="modalDeletarBtn"
                                 type="button"
                                 className="btn-danger"
-                                onClick={() => {
-                                    if (
-                                        confirm(
-                                            'Tem certeza que deseja deletar esta nota? Esta ação não pode ser desfeita.',
-                                        )
-                                    ) {
-                                        deleteCurrentNote();
-                                        alert('Nota deletada com sucesso!');
-                                    }
-                                }}
+                                onClick={handleDeleteNote}
                             >
                                 Deletar
                             </button>

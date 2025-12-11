@@ -1,16 +1,21 @@
 import { FormEvent, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import '../styles/Auth.css';
-import axios from "axios";
-import {RegisterResponse} from "../dto/register.dto.tsx";
+import axios from 'axios';
+import { RegisterResponse } from '../dto/register.dto.tsx';
 
 export function RegisterPage() {
     const navigate = useNavigate();
+
     const [nome, setNome] = useState('');
     const [email, setEmail] = useState('');
     const [senha, setSenha] = useState('');
 
-    async function criarCadastro(nome: string, email: string, senha: string): Promise<{ sucesso: boolean }> {
+    async function criarCadastro(
+        nome: string,
+        email: string,
+        senha: string,
+    ): Promise<{ sucesso: boolean }> {
         try {
             const response = await axios.post<RegisterResponse>(
                 'http://localhost:3000/usuario',
@@ -19,20 +24,22 @@ export function RegisterPage() {
                     headers: {
                         'Content-Type': 'application/json',
                     },
-                }
+                },
             );
+
             const data = response.data;
             console.log(JSON.stringify(data));
+            return { sucesso: true };
         } catch (error) {
             console.error('Erro no cadastro', error);
             return { sucesso: false };
         }
-        return { sucesso: true };
     }
 
     async function handleSubmit(e: FormEvent) {
         e.preventDefault();
         const resultado = await criarCadastro(nome, email, senha);
+
         if (resultado.sucesso) {
             alert('Cadastro realizado com sucesso!');
             navigate('/login');
@@ -47,15 +54,19 @@ export function RegisterPage() {
         <div className="auth-container">
             <div className="left-side">
                 {/* Conteúdo equivalente à esquerda do Criar_conta.html */}
+                <div className="logo-container">
+                    {/* <img src="/logo.svg" alt="WizardNote" /> */}
+                </div>
                 <h1>WizardNote</h1>
                 <p>Crie sua conta para começar a usar.</p>
             </div>
 
             <div className="right-side">
-                <div className="auth-card">
+                <section className="auth-card">
                     <h2>Criar conta</h2>
+                    <p className="subtitle">Leva menos de um minuto para começar.</p>
 
-                    <form id="cadastroForm" onSubmit={handleSubmit}>
+                    <form onSubmit={handleSubmit}>
                         <div className="form-group">
                             <label htmlFor="nome">Nome</label>
                             <input
@@ -102,7 +113,7 @@ export function RegisterPage() {
                             Acessar conta
                         </button>
                     </div>
-                </div>
+                </section>
             </div>
         </div>
     );
