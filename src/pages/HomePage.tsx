@@ -115,13 +115,13 @@ export function HomePage() {
     return (
         <div className="home-container">
             <header className="home-header">
-                <h1>Minhas notas</h1>
+                <h1>Wizard Note</h1>
                 <button
                     id="createNoteBtn"
                     className="btn-primary"
                     onClick={handleOpenCreateModal}
                 >
-                    Crie uma nota
+                    Criar Nota
                 </button>
             </header>
 
