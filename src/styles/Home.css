@@ -18,7 +18,7 @@
     border: 3px solid #4a90e2;
     padding: 15px 40px;
     display: flex;
-    justify-content: space-between;
+    justify-content: center;
     align-items: center;
     width: 100%;
     position: sticky;
@@ -38,7 +38,7 @@
     flex: 1;
 }
 
-/* Botão “Crie uma nota” – inspirado em .create-note-btn */
+/* Botão "Crie uma nota" — inspirado em .create-note-btn */
 .btn-primary {
     display: inline-flex;
     align-items: center;
@@ -90,23 +90,81 @@
     background-color: #b71c1c;
 }
 
-/* Grid de notas – baseado em .notes-grid / .note-card */
+/* Grid de notas — baseado em .notes-grid / .note-card */
 .notes-grid {
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    grid-auto-rows: 20px;
     gap: 20px;
     margin-top: 30px;
     margin-bottom: 30px;
 }
 
 .note-card {
-    background-color: #c4c4c4;
     border-radius: 8px;
     padding: 20px;
-    min-height: 150px;
     cursor: pointer;
     transition: all 0.3s ease;
     position: relative;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    display: flex;
+    flex-direction: column;
+}
+
+/* Variação de tamanhos automática */
+.note-card:nth-child(6n+1) {
+    grid-row: span 8;
+}
+
+.note-card:nth-child(6n+2) {
+    grid-row: span 12;
+}
+
+.note-card:nth-child(6n+3) {
+    grid-row: span 10;
+}
+
+.note-card:nth-child(6n+4) {
+    grid-row: span 9;
+}
+
+.note-card:nth-child(6n+5) {
+    grid-row: span 11;
+}
+
+.note-card:nth-child(6n+6) {
+    grid-row: span 13;
+}
+
+/* CORES INTERCALADAS DAS NOTAS - VERSÃO CLARA */
+/* Cor 1: Toupe Grey Claro */
+.note-card:nth-child(5n+1) {
+    background-color: #D4CDD0;
+    color: #333;
+}
+
+/* Cor 2: Yale Blue Claro */
+.note-card:nth-child(5n+2) {
+    background-color: #A4C2E4;
+    color: #333;
+}
+
+/* Cor 3: Antique White */
+.note-card:nth-child(5n+3) {
+    background-color: #F7EBD7;
+    color: #333;
+}
+
+/* Cor 4: Chocolate Cosmos Claro (Rosa Suave) */
+.note-card:nth-child(5n+4) {
+    background-color: #D4A5AE;
+    color: #333;
+}
+
+/* Cor 5: Cinza Claro */
+.note-card:nth-child(5n+5) {
+    background-color: #C5C5C5;
+    color: #333;
 }
 
 .note-card:hover {
@@ -116,14 +174,16 @@
 
 .note-card h3 {
     font-size: 1.1rem;
-    color: #333;
     margin-bottom: 10px;
+    font-weight: 600;
 }
 
 .note-card p {
     font-size: 0.9rem;
-    color: #444;
     margin-bottom: 10px;
+    line-height: 1.5;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 .tags {
@@ -135,12 +195,12 @@
 .tag {
     font-size: 0.75rem;
     padding: 4px 8px;
-    background-color: #f0f0f0;
+    background-color: rgba(255, 255, 255, 0.2);
     border-radius: 12px;
-    color: #555;
+    color: inherit;
 }
 
-/* Modal genérico – baseado em .modal-overlay / .modal-container */
+/* Modal genérico — baseado em .modal-overlay / .modal-container */
 .modal-overlay {
     position: fixed;
     top: 0;
@@ -164,6 +224,7 @@
     flex-direction: column;
     padding: 25px 30px 20px;
     box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+    overflow-y: auto;
 }
 
 /* Títulos e campos dentro do modal */
@@ -185,7 +246,8 @@
 }
 
 .modal input,
-.modal textarea {
+.modal textarea,
+.modal select {
     width: 100%;
     padding: 10px 12px;
     font-size: 0.9rem;
@@ -209,7 +271,8 @@
 }
 
 .modal input:focus,
-.modal textarea:focus {
+.modal textarea:focus,
+.modal select:focus {
     background-color: #fff;
     border-color: #4a90e2;
     box-shadow: 0 0 0 3px rgba(74, 144, 226, 0.1);
@@ -241,7 +304,7 @@
 .btn-secondary:disabled {
     opacity: 0.5;
     cursor: not-allowed;
-    background-color: #ddd; /* ou o tom que preferir */
+    background-color: #ddd;
     color: #999;
     box-shadow: none;
 }
@@ -256,6 +319,7 @@
 @media (max-width: 1024px) {
     .notes-grid {
         grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+        grid-auto-rows: 18px;
     }
 }
 
@@ -272,6 +336,7 @@
 
     .notes-grid {
         grid-template-columns: 1fr;
+        grid-auto-rows: 15px;
     }
 
     .modal {
